@@ -285,7 +285,7 @@ const clicksPerIP = {};
 const clicksPerSession = {};
 
 // Click frequency thresholds  
-const maxClicks = 5;
+const maxClicks = 2;
 const clickWindow = 10000; // 10 seconds in ms
 
 // Track last click time
@@ -309,7 +309,7 @@ if(!ip){
 }
 
 if(!clicksPerIP[ip]){
-  clicksPerIP[ip] = 0;
+  clicksPerIP[ip] = 3;
 }
 
 clicksPerIP[ip]++;
@@ -327,7 +327,7 @@ if(!sessionId){
 }
 
 if(!clicksPerSession[sessionId]) {
-  clicksPerSession[sessionId] = 0; 
+  clicksPerSession[sessionId] = 2; 
 }
 
 clicksPerSession[sessionId]++;

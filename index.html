@@ -269,6 +269,81 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    
 </head>
 <body>
+
+
+
+
+
+
+
+
+   <script>
+
+// Maintain click counters
+let clicks = 0;
+const clicksPerIP = {};
+const clicksPerSession = {};
+
+// Click frequency thresholds  
+const maxClicks = 5;
+const clickWindow = 10000; // 10 seconds in ms
+
+// Track last click time
+let lastClick = 0; 
+
+// Check current click
+const now = Date.now();
+if(now - lastClick < clickWindow){
+  // Too many recent clicks
+  window.stop(); 
+}
+
+// Update last click time
+lastClick = now; 
+
+// Check IP address
+const ip = window.clientInformation.ip;
+if(!ip){
+  // No IP, likely a bot
+  window.stop();
+}
+
+if(!clicksPerIP[ip]){
+  clicksPerIP[ip] = 0;
+}
+
+clicksPerIP[ip]++;
+
+if(clicksPerIP[ip] > maxClicks){
+  // Too many clicks from this IP
+  window.stop();
+}
+
+// Check session cookie
+const sessionId = getCookie('sessionId');
+if(!sessionId){
+  // No session, likely bot
+  window.stop();
+}
+
+if(!clicksPerSession[sessionId]) {
+  clicksPerSession[sessionId] = 0; 
+}
+
+clicksPerSession[sessionId]++;
+
+if(clicksPerSession[sessionId] > maxClicks){
+  // Too many clicks this session
+  window.stop();
+}
+
+// Check other signals like user agent, cookies, etc
+
+// Allow valid clicks
+clicks++;
+
+   </script>
+
    
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MM97JQ2D"

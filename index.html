@@ -270,48 +270,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </head>
 <body>
 
-
-
-
-
-
-
-
-   <script>
-
-// Maintain click counters
-let clicks = 0;
-
-// Track last click time
-let lastClick = 0;
-
-// Click frequency thresholds
-const maxClicks = 2; // Allow 2 clicks
-const clickWindow = 10000; // 10 seconds in ms
-
-// Check current click
-const now = Date.now();
-
-if (now - lastClick < clickWindow) {
-  // Too many recent clicks
-  window.stop();
-}
-
-// Update last click time
-lastClick = now;
-
-// Allow valid clicks
-clicks++;
-
-if (clicks > maxClicks) {
-  // Block user after 2 clicks
-  window.stop();
-}
-
-
-   </script>
-
-   
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MM97JQ2D"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

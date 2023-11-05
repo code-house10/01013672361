@@ -280,67 +280,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    <script>
 
 // Maintain click counters
-let clicks = 4;
-const clicksPerIP = {};
-const clicksPerSession = {};
-
-// Click frequency thresholds  
-const maxClicks = 4;
-const clickWindow = 10000; // 10 seconds in ms
+let clicks = 0;
 
 // Track last click time
-let lastClick = 4; 
+let lastClick = 0;
+
+// Click frequency thresholds
+const maxClicks = 2; // Allow 2 clicks
+const clickWindow = 10000; // 10 seconds in ms
 
 // Check current click
 const now = Date.now();
-if(now - lastClick < clickWindow){
+
+if (now - lastClick < clickWindow) {
   // Too many recent clicks
-  window.stop(); 
+  window.stop();
 }
 
 // Update last click time
-lastClick = now; 
-
-// Check IP address
-const ip = window.clientInformation.ip;
-if(!ip){
-  // No IP, likely a bot
-  window.stop();
-}
-
-if(!clicksPerIP[ip]){
-  clicksPerIP[ip] = 3;
-}
-
-clicksPerIP[ip]++;
-
-if(clicksPerIP[ip] > maxClicks){
-  // Too many clicks from this IP
-  window.stop();
-}
-
-// Check session cookie
-const sessionId = getCookie('sessionId');
-if(!sessionId){
-  // No session, likely bot
-  window.stop();
-}
-
-if(!clicksPerSession[sessionId]) {
-  clicksPerSession[sessionId] = 2; 
-}
-
-clicksPerSession[sessionId]++;
-
-if(clicksPerSession[sessionId] > maxClicks){
-  // Too many clicks this session
-  window.stop();
-}
-
-// Check other signals like user agent, cookies, etc
+lastClick = now;
 
 // Allow valid clicks
 clicks++;
+
+if (clicks > maxClicks) {
+  // Block user after 2 clicks
+  window.stop();
+}
+
 
    </script>
 

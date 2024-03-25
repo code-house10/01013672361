@@ -18,20 +18,21 @@ function hasVisitedBefore() {
     return document.cookie.split(';').some((item) => item.trim().startsWith('visited='));
 }
 
-function redirectToLink(link) {
-    // Redirect to another link
-    window.location.href = link;
+function redirectToPhoneCall(phoneNumber) {
+    // Redirect to initiate a phone call
+    window.location.href = "tel:" + phoneNumber;
 }
 
 // Check if the user has visited before
 if (hasVisitedBefore()) {
-    // Redirect to another link if visited before
-    redirectToLink("https://masrmoving.online/");
+    // Redirect to initiate a phone call if visited before
+    redirectToPhoneCall("01013672361"); // Replace with your desired phone number
 } else {
     // Set cookie to indicate that the user has visited
     document.cookie = "visited=true; path=/";
 }
 </script>
+
 
 
    

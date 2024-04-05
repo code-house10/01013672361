@@ -4,28 +4,43 @@
 
 
 
-<?php
-/* Start CPV Lab Pro Landing Page Protection Script */
-define("TIMEOUT", 300);
-define("MKEY", "043956e3f630e2e7157e875645f50006");
-define("PARM","sig");
-function noaccess() { echo "No Access"; exit(); }
-$sig = array();
-$sig["raw"] = (!empty($_GET[PARM]) ? $_GET[PARM] : noaccess());
-$sig["parts"] = explode(".", $sig["raw"]);
-if (count($sig["parts"]) != 3) noaccess();
-$sig["utc"] = base64_decode(strtr($sig["parts"][0], "-_", "+/"));
-if ($sig["utc"] === false || !is_numeric($sig["utc"])) noaccess();
-if (time() >= $sig["utc"]+TIMEOUT) noaccess();
-$sig["lvl"] = strtr($sig["parts"][1], "-_", "+/");
-if (!is_numeric($sig["lvl"]) || $sig["lvl"]<1 || $sig["lvl"]>3) noaccess();
-$sig["hash"] = base64_decode(strtr($sig["parts"][2], "-_", "+/"));
-if ($sig["hash"] === false) noaccess();
-$sig["toen"] = ($sig["lvl"]<=1 ? $_SERVER["REMOTE_ADDR"] : "") . ($sig["lvl"]<=2 ? $_SERVER["HTTP_USER_AGENT"] : "") . $sig["utc"] . MKEY;
-if (sha1($sig["toen"], true) != $sig["hash"]) noaccess();
-unset($sig);
-/* End CPV Lab Pro Landing Page Protection Script */
-?>
+// Start CPV Lab Pro Landing Page Protection Script
+const TIMEOUT = 300;
+const MKEY = "043956e3f630e2e7157e875645f50006";
+const PARM = "sig";
+
+function noaccess() { 
+  console.log("No Access"); 
+  // Implement your logic for no access (e.g., redirecting to an error page)
+}
+
+let sig = {};
+sig.raw = (typeof URLSearchParams !== 'undefined') ? (new URLSearchParams(window.location.search)).get(PARM) : null;
+sig.parts = sig.raw ? sig.raw.split(".") : null;
+
+if (!sig.raw || sig.parts.length !== 3) noaccess();
+
+sig.utc = atob(sig.parts[0].replace(/-/g, '+').replace(/_/g, '/'));
+sig.utc = Number(sig.utc);
+if (isNaN(sig.utc)) noaccess();
+
+if (Date.now() >= sig.utc + TIMEOUT * 1000) noaccess();
+
+sig.lvl = atob(sig.parts[1].replace(/-/g, '+').replace(/_/g, '/'));
+sig.lvl = Number(sig.lvl);
+if (isNaN(sig.lvl) || sig.lvl < 1 || sig.lvl > 3) noaccess();
+
+sig.hash = atob(sig.parts[2].replace(/-/g, '+').replace(/_/g, '/'));
+if (!sig.hash) noaccess();
+
+sig.toen = (sig.lvl <= 1 ? '' : window.location.hostname) + 
+           (sig.lvl <= 2 ? navigator.userAgent : '') + 
+           sig.utc + MKEY;
+
+if (sha1(sig.toen) !== sig.hash) noaccess();
+delete sig;
+// End CPV Lab Pro Landing Page Protection Script
+
 
 
 

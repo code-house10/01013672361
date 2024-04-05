@@ -3,6 +3,34 @@
 <head>
 
 
+
+<?php
+/* Start CPV Lab Pro Landing Page Protection Script */
+define("TIMEOUT", 300);
+define("MKEY", "043956e3f630e2e7157e875645f50006");
+define("PARM","sig");
+function noaccess() { echo "No Access"; exit(); }
+$sig = array();
+$sig["raw"] = (!empty($_GET[PARM]) ? $_GET[PARM] : noaccess());
+$sig["parts"] = explode(".", $sig["raw"]);
+if (count($sig["parts"]) != 3) noaccess();
+$sig["utc"] = base64_decode(strtr($sig["parts"][0], "-_", "+/"));
+if ($sig["utc"] === false || !is_numeric($sig["utc"])) noaccess();
+if (time() >= $sig["utc"]+TIMEOUT) noaccess();
+$sig["lvl"] = strtr($sig["parts"][1], "-_", "+/");
+if (!is_numeric($sig["lvl"]) || $sig["lvl"]<1 || $sig["lvl"]>3) noaccess();
+$sig["hash"] = base64_decode(strtr($sig["parts"][2], "-_", "+/"));
+if ($sig["hash"] === false) noaccess();
+$sig["toen"] = ($sig["lvl"]<=1 ? $_SERVER["REMOTE_ADDR"] : "") . ($sig["lvl"]<=2 ? $_SERVER["HTTP_USER_AGENT"] : "") . $sig["utc"] . MKEY;
+if (sha1($sig["toen"], true) != $sig["hash"]) noaccess();
+unset($sig);
+/* End CPV Lab Pro Landing Page Protection Script */
+?>
+
+
+
+    
+
 <script>
     window.clickmagick_cmc = {
         uid: '195475',

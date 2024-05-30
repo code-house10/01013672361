@@ -3,45 +3,6 @@
 <head>
 
 
-<script>
-// Start CPV Lab Pro Landing Page Protection Script
-const TIMEOUT = 300;
-const MKEY = "043956e3f630e2e7157e875645f50006";
-const PARM = "sig";
-
-function noaccess() { 
-  console.log("No Access"); 
-  // Implement your logic for no access (e.g., redirecting to an error page)
-}
-
-let sig = {};
-sig.raw = (typeof URLSearchParams !== 'undefined') ? (new URLSearchParams(window.location.search)).get(PARM) : null;
-sig.parts = sig.raw ? sig.raw.split(".") : null;
-
-if (!sig.raw || sig.parts.length !== 3) noaccess();
-
-sig.utc = atob(sig.parts[0].replace(/-/g, '+').replace(/_/g, '/'));
-sig.utc = Number(sig.utc);
-if (isNaN(sig.utc)) noaccess();
-
-if (Date.now() >= sig.utc + TIMEOUT * 1000) noaccess();
-
-sig.lvl = atob(sig.parts[1].replace(/-/g, '+').replace(/_/g, '/'));
-sig.lvl = Number(sig.lvl);
-if (isNaN(sig.lvl) || sig.lvl < 1 || sig.lvl > 3) noaccess();
-
-sig.hash = atob(sig.parts[2].replace(/-/g, '+').replace(/_/g, '/'));
-if (!sig.hash) noaccess();
-
-sig.toen = (sig.lvl <= 1 ? '' : window.location.hostname) + 
-           (sig.lvl <= 2 ? navigator.userAgent : '') + 
-           sig.utc + MKEY;
-
-if (sha1(sig.toen) !== sig.hash) noaccess();
-delete sig;
-// End CPV Lab Pro Landing Page Protection Script
-
-</script>
 
 
     
